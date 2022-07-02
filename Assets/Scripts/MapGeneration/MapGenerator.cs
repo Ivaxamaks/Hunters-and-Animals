@@ -4,6 +4,7 @@ using Utility;
 
 namespace MapGeneration
 {
+    [RequireComponent(typeof(NavMeshSurface))]
     public class MapGenerator : MonoBehaviour
     {
         public Map Generate(MapGenerationSettings settings)

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MapGenerationSettings
   m_EditorClassIdentifier: 
   ObstaclePrefabs:
-  - {fileID: 4732917052259147585, guid: 4fa1e34dd1fa29d4facb0f8f265a8501, type: 3}
+  - {fileID: 3963990170970175759, guid: 4fa1e34dd1fa29d4facb0f8f265a8501, type: 3}
   GroundPrefabs:
-  - {fileID: 1740746366586803702, guid: aecbcce34939ff941b45f080b0b9d995, type: 3}
+  - {fileID: 3364613512935267805, guid: aecbcce34939ff941b45f080b0b9d995, type: 3}
   Size: {x: 100, y: 100}
   MinObstacleSize: {x: 1, y: 1}
   MaxObstacleSize: {x: 10, y: 10}
-  MinMaxObstacleCount: {x: 5, y: 15}
+  MinMaxObstacleCount: {x: 15, y: 25}

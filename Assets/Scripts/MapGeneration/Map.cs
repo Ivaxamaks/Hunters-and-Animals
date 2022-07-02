@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Utility;
 
 namespace MapGeneration
@@ -42,6 +43,14 @@ namespace MapGeneration
         public Tile GetTile(int x, int y)
         {
             return _tiles[x, y];
+        }
+        
+        public Tile GetRandomTile()
+        {
+            var randomX = (int)Random.Range(0, _size.x);
+            var randomY = (int)Random.Range(0, _size.y);
+            var tile = _tiles[randomX, randomY];
+            return tile.Obstacle != null ? GetRandomTile() : _tiles[randomX, randomY];
         }
 
         public List<Tile> GetNeighbourTiles(int x, int y, Vector2 area)
