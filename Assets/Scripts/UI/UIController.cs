@@ -36,11 +36,11 @@ namespace UI
             
             _subscriptions = new CompositeDisposable
             {
-                EventStreams.UserInterface.Subscribe<UpdateActiveUnitsAmount>(UnitCountChangeHandler)
+                EventStreams.UserInterface.Subscribe<ActiveUnitsCountChangedEvent>(UnitCountChangeHandler)
             };
         }
 
-        private void UnitCountChangeHandler(UpdateActiveUnitsAmount eventData)
+        private void UnitCountChangeHandler(ActiveUnitsCountChangedEvent eventData)
         {
             _unitCounterField.text = $" Количество Охотников: {eventData.ActiveHunters}, Количество Дичи: {eventData.ActiveAnimals}";
         }
@@ -65,7 +65,7 @@ namespace UI
             var isNumber = int.TryParse(value, out var number);
             if (isNumber)
             {
-                EventStreams.UserInterface.Publish(new UnitCreateAmountChange(number)); 
+                EventStreams.UserInterface.Publish(new UnitCreateAmountChangedEvent(number)); 
             }
             else
             {
@@ -78,7 +78,7 @@ namespace UI
             var isNumber = float.TryParse(value, out var number);
             if (isNumber)
             {
-                EventStreams.UserInterface.Publish(new AnimalRadiusChangeEvent(number)); 
+                EventStreams.UserInterface.Publish(new AnimalRadiusChangedEvent(number)); 
             }
             else
             {

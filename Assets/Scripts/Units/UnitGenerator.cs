@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Plugins.ObjectPool;
+using UnityEngine;
 using MapGeneration;
 using Utility;
 
@@ -38,7 +38,7 @@ namespace Units
 
         private void GenerateUnitPosition(GameObject unit)
         {
-            var tilePosition = _map.GetRandomTile().Position;
+            var tilePosition = _map.GetRandomWalkableTile().Position;
             var position = Utilities.ConvertVector2(tilePosition);
             unit.transform.position = position;
         }

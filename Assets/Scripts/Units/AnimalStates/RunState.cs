@@ -1,17 +1,26 @@
+using UnityEngine.AI;
 using FSM;
-using UnityEngine;
 
 namespace Units.AnimalStates
 {
     public class RunState : StateBase
     {
-        public RunState(bool needsExitTime) : base(needsExitTime)
+        private readonly NavMeshAgent _navMeshAgent;
+        
+        public RunState(NavMeshAgent navMeshNavMeshAgent, bool needsExitTime) : base(needsExitTime)
         {
+            _navMeshAgent = navMeshNavMeshAgent;
         }
         
         public override void OnEnter()
         {
-            Debug.Log("RunState");
+            _navMeshAgent.isStopped = false;
+        }
+
+        public override void OnExit()
+        {
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.isStopped = true;
         }
 
         public override void OnLogic()

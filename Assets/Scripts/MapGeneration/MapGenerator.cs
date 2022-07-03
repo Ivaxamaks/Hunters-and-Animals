@@ -18,7 +18,7 @@ namespace MapGeneration
 
         private Map GenerateMap(MapGenerationSettings settings)
         {
-            var randomPrefab = Utilities.RandomElement(settings.GroundPrefabs);
+            var randomPrefab = Utilities.GetRandomElement(settings.GroundPrefabs);
             var map = new Map(settings.Size, randomPrefab);
             return map;
         }
@@ -41,7 +41,7 @@ namespace MapGeneration
             foreach (var tile in tiles)
             {
                 if (tile.Obstacle != null) continue;
-                var randomPrefab = Utilities.RandomElement(settings.ObstaclePrefabs);
+                var randomPrefab = Utilities.GetRandomElement(settings.ObstaclePrefabs);
                 tile.SetObstacle(randomPrefab);
             }
         }

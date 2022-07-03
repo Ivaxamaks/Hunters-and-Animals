@@ -11,51 +11,80 @@ namespace Units
         private readonly List<Unit> _activeUnits;
         private readonly UnitGenerator _unitGenerator;
         private readonly CompositeDisposable _subscriptions;
-
-        private int _unitCreateAmount;
+        private readonly UnitsCounter _unitCounter;
+        private readonly UnitsSettingsProvider _unitsSettingsProvider;
 
         public UnitManager(Map map, UnitsSettings unitsSettings)
         {
             var unitObject = unitsSettings.UnitPrefab.gameObject;
             _unitGenerator = new UnitGenerator(map, unitObject);
+            _unitsSettingsProvider = new UnitsSettingsProvider(unitsSettings);
+            _unitCounter = new UnitsCounter();
             _activeUnits = new List<Unit>();
             _subscriptions = new CompositeDisposable
             {
-                EventStreams.UserInterface.Subscribe<CreateUnitsEvent>(CreateEventHandler),
-                EventStreams.UserInterface.Subscribe<UnitCreateAmountChange>(CreateAmountChangeHandler),
+                EventStreams.UserInterface.Subscribe<CreateUnitsEvent>(CreateUnitsEventHandler),
                 EventStreams.UserInterface.Subscribe<DestroyUnitsEvent>(DestroyUnitsEventHandler),
                 EventStreams.UserInterface.Subscribe<InvertUnitsEvent>(InvertUnitsEventHandler),
+                EventStreams.UserInterface.Subscribe<UnitDestroyedEvent>(UnitDestroyedEventHandler),
+                EventStreams.UserInterface.Subscribe<UnitRoleChanged>(UnitRoleChangedEventHandler)
             };
         }
 
         public void Dispose()
         {
+            _unitsSettingsProvider.Dispose();
             _subscriptions.Dispose();
         }
-        
+
+        private void UnitRoleChangedEventHandler(UnitRoleChanged eventData)
+        {
+            _unitCounter.UnitRoleChanged(eventData.UnitType);
+        }
+
+        private void UnitDestroyedEventHandler(UnitDestroyedEvent eventData)
+        {
+            _unitCounter.UnitDestroyed(eventData.type);
+        }
+
         private void DestroyUnitsEventHandler(DestroyUnitsEvent eventData)
         {
             _activeUnits.Clear();
             _unitGenerator.UnitsToPool();
+            _unitCounter.ProvideDestroyedUnitsCount();
         }
 
-        private void CreateEventHandler(CreateUnitsEvent obj)
+        private void CreateUnitsEventHandler(CreateUnitsEvent eventData)
         {
-            var newUnits = _unitGenerator.Generate(_unitCreateAmount);
+            var newUnits = GenerateUnits();
+            ActivateUnits(newUnits);
             _activeUnits.AddRange(newUnits);
+            _unitCounter.CreatedUnitsCount(newUnits);
         }
 
-        private void CreateAmountChangeHandler(UnitCreateAmountChange eventData)
+        private List<Unit> GenerateUnits()
         {
-            _unitCreateAmount = eventData.Amount;
+            var unitCreateAmount = _unitsSettingsProvider.GetCreateAmount();
+            var newUnits = _unitGenerator.Generate(unitCreateAmount);
+            return newUnits;
         }
 
+        private void ActivateUnits(List<Unit> newUnits)
+        {
+            foreach (var unit in newUnits)
+            {
+                unit.Init(_unitsSettingsProvider);
+            }
+        }
+        
         private void InvertUnitsEventHandler(InvertUnitsEvent eventData)
         {
             foreach (var unit in _activeUnits)
             {
                 unit.InvertRole();
             }
+            
+            _unitCounter.InvertedUnitsCount();
         }
     }
 }

@@ -1,45 +1,59 @@
 using Units.AnimalStates;
 using Units.HunterStates;
+using UnityEngine.AI;
 using FSM;
 
 namespace Units
 {
     public class UnitStatesController
     {
-        private readonly Unit _unit;
+        private readonly UnitsSettingsProvider _settings;
+        private readonly TargetDetector _targetDetector;
         private readonly StateMachine _stateMachine;
+        private readonly NavMeshAgent _navMeshAgent;
 
-        public UnitStatesController(Unit unit)
+        private UnitType _currentType;
+
+        public UnitStatesController(UnitsSettingsProvider settings, TargetDetector targetDetector,
+            NavMeshAgent navMeshAgent)
         {
-            _unit = unit;
+            _settings = settings;
+            _targetDetector = targetDetector;
+            _navMeshAgent = navMeshAgent;
+            
             _stateMachine = new StateMachine();
             InitAnimalStates();
             InitHunterStates();
             _stateMachine.AddTransition(
                 "HunterState",
                 "AnimalState",
-                transition => _unit.UnitType == UnitType.Animal);
+                transition => _currentType == UnitType.Animal);
             _stateMachine.AddTransition(
                 "AnimalState",
                 "HunterState",
-                transition => _unit.UnitType == UnitType.Hunter);
+                transition => _currentType == UnitType.Hunter);
             _stateMachine.Init();
+        }
+
+        public void RoleChanged(UnitType unitType)
+        {
+            _currentType = unitType;
         }
 
         private void InitHunterStates()
         {
             var hunterStateMachine = new StateMachine();
             _stateMachine.AddState("HunterState", hunterStateMachine);
-            hunterStateMachine.AddState("WanderState",new WanderState(false));
-            hunterStateMachine.AddState("ChaseState",new ChaseState(false));
+            hunterStateMachine.AddState("WanderState",new WanderState(_settings, _navMeshAgent, false));
+            hunterStateMachine.AddState("ChaseState",new ChaseState(_targetDetector, _navMeshAgent, false));
             hunterStateMachine.AddTransition(
                 "WanderState",
                 "ChaseState",
-                transition => _unit.Target != null);
+                transition => _targetDetector.Target != null);
             hunterStateMachine.AddTransition(
                 "ChaseState",
                 "WanderState",
-                transition => _unit.Target == null);
+                transition => _targetDetector.Target == null);
         }
 
         private void InitAnimalStates()
@@ -47,21 +61,22 @@ namespace Units
             var animalStateMachine = new StateMachine();
             _stateMachine.AddState("AnimalState", animalStateMachine);
             animalStateMachine.AddState("IdleState",new IdleState(false));
-            animalStateMachine.AddState("RunState",new RunState(false));
+            animalStateMachine.AddState("RunState",new RunState(_navMeshAgent, false));
             animalStateMachine.AddTransition(
                 "IdleState",
                 "RunState",
-                transition => _unit.Target != null);
+                transition => _targetDetector.Target != null);
             animalStateMachine.AddTransition(
                 "RunState",
                 "IdleState",
-                transition => _unit.Target == null);
+                transition => _targetDetector.Target == null);
             animalStateMachine.Init();
         }
 
         public void Update()
         {
             _stateMachine.OnLogic();
+            _targetDetector.DetectTarget(_settings, _currentType, _navMeshAgent.transform.position);
         }
     }
 }

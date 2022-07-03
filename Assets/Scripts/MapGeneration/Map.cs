@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using Utility;
 
 namespace MapGeneration
@@ -25,6 +24,11 @@ namespace MapGeneration
             _tiles = tiles;
         }
 
+        public Tile GetTile(int x, int y)
+        {
+            return _tiles[x, y];
+        }
+
         public IEnumerable<Tile> GetTilesInRange(Bounds bounds)
         {
             var countX = bounds.max.x > _size.x ? _size.x : bounds.max.x;
@@ -40,17 +44,12 @@ namespace MapGeneration
             }
         }
 
-        public Tile GetTile(int x, int y)
-        {
-            return _tiles[x, y];
-        }
-        
-        public Tile GetRandomTile()
+        public Tile GetRandomWalkableTile()
         {
             var randomX = (int)Random.Range(0, _size.x);
             var randomY = (int)Random.Range(0, _size.y);
             var tile = _tiles[randomX, randomY];
-            return tile.Obstacle != null ? GetRandomTile() : _tiles[randomX, randomY];
+            return tile.Obstacle == null ? _tiles[randomX, randomY] : GetRandomWalkableTile();
         }
 
         public List<Tile> GetNeighbourTiles(int x, int y, Vector2 area)

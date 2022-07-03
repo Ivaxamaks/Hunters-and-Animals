@@ -14,15 +14,18 @@ public class MainManager : MonoBehaviour
     private UnitsSettings _unitsSettings;
     
     private UnitManager _unitManager;
+    private GameStateController _gameStateController;
     
     private void Start()
     {
         Map = _mapGenerator.Generate(_mapGenerationSettings);
         _unitManager = new UnitManager(Map, _unitsSettings);
+        _gameStateController = new GameStateController();
     }
 
     private void OnDestroy()
     {
         _unitManager.Dispose();
+        _gameStateController.Dispose();
     }
 }

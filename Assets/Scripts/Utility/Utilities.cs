@@ -5,7 +5,7 @@ namespace Utility
 {
     public static class Utilities
     {
-        public static T RandomElement<T>(List<T> array)
+        public static T GetRandomElement<T>(List<T> array)
         {
             var arrayCount = array.Count;
             var randomIndex = Random.Range(0, arrayCount);

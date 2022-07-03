@@ -2,11 +2,11 @@ using SimpleEventBus.Events;
 
 namespace Events
 {
-    public class UnitCreateAmountChange : EventBase
+    public class UnitCreateAmountChangedEvent : EventBase
     {
         public int Amount { get; }
 
-        public UnitCreateAmountChange(int amount)
+        public UnitCreateAmountChangedEvent(int amount)
         {
             Amount = amount;
         }

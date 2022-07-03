@@ -2,11 +2,11 @@ using SimpleEventBus.Events;
 
 namespace Events
 {
-    public class AnimalRadiusChangeEvent : EventBase
+    public class AnimalRadiusChangedEvent : EventBase
     {
         public float Radius { get; }
         
-        public AnimalRadiusChangeEvent(float radius)
+        public AnimalRadiusChangedEvent(float radius)
         {
             Radius = radius;
         }
