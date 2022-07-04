@@ -17,5 +17,5 @@ MonoBehaviour:
   MovementErrorDistance: 1
   HunterDetectRadius: 15
   HunterWanderDistance: {x: 5, y: 10}
-  AnimalMinMaxRunDistance: {x: 5, y: 10}
+  AnimalMinMaxRunDistance: {x: 2, y: 4}
   AnimalDetectRadius: 2.5

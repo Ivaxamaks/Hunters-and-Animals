@@ -9,9 +9,9 @@ namespace Units
     {
         private readonly UnitsSettingsProvider _settings;
         private readonly TargetDetector _targetDetector;
-        private readonly StateMachine _stateMachine;
         private readonly NavMeshAgent _navMeshAgent;
 
+        private  StateMachine _stateMachine;
         private UnitType _currentType;
 
         public UnitStatesController(UnitsSettingsProvider settings, TargetDetector targetDetector,
@@ -20,7 +20,16 @@ namespace Units
             _settings = settings;
             _targetDetector = targetDetector;
             _navMeshAgent = navMeshAgent;
-            
+            InitStateMachine();
+        }
+
+        public void RoleChanged(UnitType unitType)
+        {
+            _currentType = unitType;
+        }
+
+        private void InitStateMachine()
+        {
             _stateMachine = new StateMachine();
             InitAnimalStates();
             InitHunterStates();
@@ -33,11 +42,6 @@ namespace Units
                 "HunterState",
                 transition => _currentType == UnitType.Hunter);
             _stateMachine.Init();
-        }
-
-        public void RoleChanged(UnitType unitType)
-        {
-            _currentType = unitType;
         }
 
         private void InitHunterStates()

@@ -51,6 +51,22 @@ namespace Units
             EventStreams.UserInterface.Publish(new UnitDestroyedEvent(UnitType));
         }
 
+        private void SetRandomRole()
+        {
+            var maxRandomNumber = 100;
+            var randomNumber = Random.Range(0, maxRandomNumber);
+            UnitType = randomNumber > maxRandomNumber / 2 ? UnitType.Hunter : UnitType.Animal;
+            ActivateUnit();
+        }
+
+        private void ActivateUnit()
+        {
+            _statesController.RoleChanged(UnitType);
+            gameObject.layer = LayerMask.NameToLayer(UnitType.ToString());
+            transform.localScale = Vector3.one; 
+            _renderer.material.color = UnitType == UnitType.Hunter ? Color.red : Color.blue;
+        }
+
         private void OnUnitClick()
         {
             var nextType = UnitType == UnitType.Animal ? UnitType.Hunter : UnitType.Animal;
@@ -72,22 +88,6 @@ namespace Units
             target.Destroy();
         }
 
-        private void SetRandomRole()
-        {
-            var maxRandomNumber = 100;
-            var randomNumber = Random.Range(0, maxRandomNumber);
-            UnitType = randomNumber > maxRandomNumber / 2 ? UnitType.Hunter : UnitType.Animal;
-            ActivateUnit();
-        }
-
-        private void ActivateUnit()
-        {
-            _statesController.RoleChanged(UnitType);
-            gameObject.layer = LayerMask.NameToLayer(UnitType.ToString());
-            transform.localScale = Vector3.one; 
-            _renderer.material.color = UnitType == UnitType.Hunter ? Color.red : Color.blue;
-        }
-        
         private void Update()
         {
             _statesController?.Update();
