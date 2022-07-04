@@ -61,11 +61,11 @@ namespace Units
             var animalStateMachine = new StateMachine();
             _stateMachine.AddState("AnimalState", animalStateMachine);
             animalStateMachine.AddState("IdleState",new IdleState(false));
-            animalStateMachine.AddState("RunState",new RunState(_navMeshAgent, false));
+            animalStateMachine.AddState("RunState",new RunState(_settings, _targetDetector, _navMeshAgent, false));
             animalStateMachine.AddTransition(
                 "IdleState",
                 "RunState",
-                transition => _targetDetector.Target != null);
+                transition => _targetDetector.Target != null); 
             animalStateMachine.AddTransition(
                 "RunState",
                 "IdleState",

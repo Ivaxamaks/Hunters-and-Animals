@@ -36,7 +36,7 @@ namespace MapGeneration
         {
             var size = Utilities.RandomBetweenVectors2(settings.MinObstacleSize, settings.MaxObstacleSize);
             var point = Utilities.RandomBetweenVectors2(Vector2.zero, settings.Size);
-            var bounds = new Bounds(Utilities.ConvertVector2(point), Utilities.ConvertVector2(size));
+            var bounds = new Bounds(Utilities.ConvertVector2(point) + Vector3.up, Utilities.ConvertVector2(size));
             var tiles = map.GetTilesInRange(bounds);
             foreach (var tile in tiles)
             {

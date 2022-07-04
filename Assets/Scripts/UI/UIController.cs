@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using SimpleEventBus.Disposables;
 using Plugins.SimpleEventBus;
+using UnityEngine.UI;
+using UnityEngine;
 using Events;
 
 namespace UI

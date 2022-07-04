@@ -4,8 +4,6 @@ using Units;
 
 public class MainManager : MonoBehaviour
 {
-    public Map Map { get; private set; }
-    
     [SerializeField]
     private MapGenerator _mapGenerator;
     [SerializeField]
@@ -18,8 +16,8 @@ public class MainManager : MonoBehaviour
     
     private void Start()
     {
-        Map = _mapGenerator.Generate(_mapGenerationSettings);
-        _unitManager = new UnitManager(Map, _unitsSettings);
+        var map = _mapGenerator.Generate(_mapGenerationSettings);
+        _unitManager = new UnitManager(map, _unitsSettings);
         _gameStateController = new GameStateController();
     }
 

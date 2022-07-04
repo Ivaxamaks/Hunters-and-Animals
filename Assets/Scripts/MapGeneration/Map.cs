@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Utility;
 
 namespace MapGeneration
 {
     public class Map
     {
-        private Tile[,] _tiles;
-        private Vector2 _size;
+        private readonly Tile[,] _tiles;
+        private readonly Vector2 _size;
 
         public Map(Vector2 size, GameObject surface)
         {
@@ -23,12 +22,7 @@ namespace MapGeneration
 
             _tiles = tiles;
         }
-
-        public Tile GetTile(int x, int y)
-        {
-            return _tiles[x, y];
-        }
-
+        
         public IEnumerable<Tile> GetTilesInRange(Bounds bounds)
         {
             var countX = bounds.max.x > _size.x ? _size.x : bounds.max.x;
@@ -50,23 +44,6 @@ namespace MapGeneration
             var randomY = (int)Random.Range(0, _size.y);
             var tile = _tiles[randomX, randomY];
             return tile.Obstacle == null ? _tiles[randomX, randomY] : GetRandomWalkableTile();
-        }
-
-        public List<Tile> GetNeighbourTiles(int x, int y, Vector2 area)
-        {
-            var neighbourTiles = new List<Tile>();
-            var currentTile = GetTile(x, y);
-            var point = Utilities.ConvertVector2(currentTile.Position);
-            var size = Utilities.ConvertVector2(area);
-            var bounds = new Bounds(point, size);
-            var tiles = GetTilesInRange(bounds);
-            foreach (var tile in tiles)
-            {
-                if (tile.Obstacle != null) continue;
-                neighbourTiles.Add(tile);
-            }
-
-            return neighbourTiles;
         }
     }
 }

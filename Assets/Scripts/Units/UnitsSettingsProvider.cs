@@ -1,6 +1,7 @@
+using UnityEngine;
+using Events;
 using SimpleEventBus.Disposables;
 using Plugins.SimpleEventBus;
-using Events;
 
 namespace Units
 {
@@ -8,7 +9,8 @@ namespace Units
     {
         public float TargetUpdateCooldown { get; private set; }
         public float MovementErrorDistance { get; private set; }
-        public float HunterWanderDistance { get; private set; }
+        public Vector2 HunterMinMaxWanderDistance { get; private set; }
+        public Vector2 AnimalMinMaxRunDistance { get; private set; }
         
         private float _hunterDetectRadius;
         private float _animalDetectRadius;
@@ -49,7 +51,8 @@ namespace Units
             _hunterDetectRadius = unitsSettings.HunterDetectRadius;
             TargetUpdateCooldown = unitsSettings.TargetUpdateCooldown;
             MovementErrorDistance = unitsSettings.MovementErrorDistance;
-            HunterWanderDistance = unitsSettings.HunterWanderDistance;
+            HunterMinMaxWanderDistance = unitsSettings.HunterWanderDistance;
+            AnimalMinMaxRunDistance = unitsSettings.AnimalMinMaxRunDistance;
         }
 
         private void AnimalRadiusChanged(AnimalRadiusChangedEvent eventData)

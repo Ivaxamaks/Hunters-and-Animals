@@ -1,6 +1,7 @@
-using FSM;
 using UnityEngine;
 using UnityEngine.AI;
+using Utility;
+using FSM;
 
 namespace Units.HunterStates
 {
@@ -32,7 +33,7 @@ namespace Units.HunterStates
             var movePoint = GetRandomPoint();
             if (_navMeshAgent.CalculatePath(movePoint, _navMeshPath))
             {
-                movePoint = _navMeshAgent.gameObject.transform.position;
+                movePoint = GetRandomPoint();
             }
             
             _navMeshAgent.SetDestination(movePoint);
@@ -41,7 +42,7 @@ namespace Units.HunterStates
         private Vector3 GetRandomPoint()
         {
             var position = _navMeshAgent.gameObject.transform.position;
-            var wanderRadius = _settings.HunterWanderDistance;
+            var wanderRadius = Utilities.RandomMinMaxVector2(-_settings.HunterMinMaxWanderDistance);
             var movePoint = new Vector3(Random.Range(-wanderRadius, wanderRadius), 0, 
                     Random.Range(-wanderRadius, wanderRadius)) + position;
             return movePoint;

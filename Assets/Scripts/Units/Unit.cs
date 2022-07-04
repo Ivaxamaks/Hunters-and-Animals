@@ -1,7 +1,7 @@
-using Events;
-using Plugins.SimpleEventBus;
 using UnityEngine;
 using UnityEngine.AI;
+using Events;
+using Plugins.SimpleEventBus;
 
 namespace Units
 {
@@ -11,6 +11,7 @@ namespace Units
         Hunter
     }
     
+    [RequireComponent(typeof(UnitCollisionHandler))]
     [RequireComponent(typeof(UnitClickHandler))]
     [RequireComponent(typeof(NavMeshAgent))]
     public class Unit : MonoBehaviour
@@ -27,7 +28,7 @@ namespace Units
         {
             var navMeshAgent = GetComponent<NavMeshAgent>();
             _targetDetector = new TargetDetector();
-            _statesController = new UnitStatesController(unitsSettings,_targetDetector, navMeshAgent);
+            _statesController = new UnitStatesController(unitsSettings, _targetDetector, navMeshAgent);
             SetRandomRole();
 
             var clickHandler = GetComponent<UnitClickHandler>();
@@ -46,8 +47,8 @@ namespace Units
         public void Destroy()
         {
             if(!gameObject.activeSelf) return;
-            EventStreams.UserInterface.Publish(new UnitDestroyedEvent(UnitType));
             gameObject.SetActive(false);
+            EventStreams.UserInterface.Publish(new UnitDestroyedEvent(UnitType));
         }
 
         private void OnUnitClick()
